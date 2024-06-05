@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mychatapp/controller/auth_service.dart';
 import 'package:mychatapp/controller/chat_service.dart';
+import 'package:intl/intl.dart';
 
 class ChatPage extends StatelessWidget {
   final AuthService authService = Get.find();
@@ -40,15 +41,40 @@ class ChatPage extends StatelessWidget {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     var message = messages[index];
+                    var timestamp = message['timestamp'] as Timestamp;
+                    var formattedTime =
+                        DateFormat('hh:mm a').format(timestamp.toDate());
                     bool isMe = message['userId'] == authService.user!.uid;
                     return ListTile(
                       title: Align(
                         alignment:
                             isMe ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          color: isMe ? Colors.blue : Colors.grey[300],
-                          child: Text(message['text']),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(5),
+                                    topRight: Radius.circular(5),
+                                    bottomLeft: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
+                                color: isMe ? Colors.blue : Colors.grey[300],
+                              ),
+                              child: Text(
+                                message['text'],
+                                style: TextStyle(
+                                    color: !isMe
+                                        ? Colors.black
+                                        : Colors.grey[300]),
+                              ),
+                            ),
+                            Text(
+                              formattedTime,
+                              style: const TextStyle(fontSize: 8),
+                            )
+                          ],
                         ),
                       ),
                     );
