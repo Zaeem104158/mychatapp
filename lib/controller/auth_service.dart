@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -36,6 +34,11 @@ class AuthService extends GetxController {
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+      Get.offAllNamed('/login');
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
   }
 }

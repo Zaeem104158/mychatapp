@@ -41,9 +41,12 @@ class ChatPage extends StatelessWidget {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     var message = messages[index];
-                    var timestamp = message['timestamp'] as Timestamp;
-                    var formattedTime =
-                        DateFormat('hh:mm a').format(timestamp.toDate());
+                    Timestamp? timestamp = message['timestamp'] as Timestamp?;
+                    String? formattedTime;
+                    if (timestamp != null) {
+                      formattedTime =
+                          DateFormat('hh:mm a').format(timestamp.toDate());
+                    }
                     bool isMe = message['userId'] == authService.user!.uid;
                     return ListTile(
                       title: Align(
@@ -71,7 +74,7 @@ class ChatPage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              formattedTime,
+                              formattedTime ?? "",
                               style: const TextStyle(fontSize: 8),
                             )
                           ],
